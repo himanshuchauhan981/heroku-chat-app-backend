@@ -11,8 +11,8 @@ const {authRoutes, routes} = require('../routers')
 
 const app = express()
 
-const server = app.listen(process.env.PORT||'0.0.0.0',(err)=>{
-    if(err) console.log(err)
+const server = app.listen(process.env.PORT||'0.0.0.0',(err)=>{ 
+    console.log(err)
     // else console.log(`Running on ${HOST}:${PORT}`)
 }) 
 
