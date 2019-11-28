@@ -1,16 +1,17 @@
+
 const express = require('express')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const socket = require('socket.io')
 
-const { PORT, HOST } = require('./config')
+// const { PORT, HOST } = require('./config')
 require('../db').connection;
 const {authRoutes, routes} = require('../routers')
 
 const app = express()
 
-const server = app.listen(PORT,HOST,(err)=>{
+const server = app.listen(process.env.PORT||'0.0.0.0',(err)=>{
     if(err) console.log(err)
     else console.log(`Running on ${HOST}:${PORT}`)
 }) 
