@@ -13,7 +13,6 @@ const app = express()
 
 const server = app.listen(process.env.PORT||'0.0.0.0',(err)=>{ 
     console.log(err)
-    // else console.log(`Running on ${HOST}:${PORT}`)
 }) 
 
 app.use(cors())
