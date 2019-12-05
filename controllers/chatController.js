@@ -1,17 +1,18 @@
 const { chatHandler } = require('../handlers')
 
 const saveNewMessage = async(message)=>{
-    chatHandler.saveNewMessage(message)
+    let newMessage = await chatHandler.saveNewMessage(message)
+    return newMessage
 }
 
-const getParticularRoomMessages = async(room)=>{
-    let messages = await chatHandler.getParticularRoomMessages(room)
+const getParticularRoomMessages = async(room,sender,receiver)=>{
+    let messages = await chatHandler.getParticularRoomMessages(room,sender,receiver)
     return messages
 }
 
-const getRoomMessages = async(req,res)=>{
-    let messages = await chatHandler.getRoomMessages(req,res)
-    res.status(200).send(messages)
+const getRoomMessages = async(room)=>{
+    let messages = await chatHandler.getRoomMessages(room)
+    return messages
 }
 
 module.exports = {

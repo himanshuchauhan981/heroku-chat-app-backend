@@ -1,7 +1,7 @@
 const { showUsersLogic } = require('../handlers')
 
-const showAllActiveUsers  = async (username)=>{
-    const response = await showUsersLogic.showAllUsers(username)
+const showAllActiveUsers  = async (currentUser)=>{
+    const response = await showUsersLogic.showAllUsers(currentUser)
     return response
 }
 

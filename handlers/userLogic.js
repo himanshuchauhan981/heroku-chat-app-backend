@@ -30,7 +30,6 @@ const loginExistingUsers = async(req,res)=>{
     if(status != null){
         if(bcryptjs.compareSync(req.body.loginpassword,status.password)){
             let token = tokenUtil.createJWTToken(status._id)
-            console.log(status.username)
             await userLoginStatus.update({username:status.username},{$set:{isActive:'online'}})
             return {isLoginSuccessful: true,token: token}
         }

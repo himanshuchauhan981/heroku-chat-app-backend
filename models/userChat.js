@@ -6,7 +6,7 @@ const userChat = new Schema({
     sender:{
         type: String
     },
-    reciever: {
+    receiver: {
         type: String
     },
     text:{
