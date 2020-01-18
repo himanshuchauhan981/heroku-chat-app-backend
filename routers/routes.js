@@ -2,7 +2,10 @@ const express = require('express')
 
 const { users, showUsers,groupChatController } = require('../controllers')
 const { authenticate } = require('../auth')
-const {upload} = require('../handlers').imageStorage
+// const {upload} = require('../handlers').imageStorage
+
+// app.use(upload.array());
+// app.use(express.static('public'))
 
 module.exports = ()=>{
     const router = express.Router();
@@ -15,12 +18,7 @@ module.exports = ()=>{
 
     router.get('/users',authenticate,showUsers.showAllActiveUsers)
 
-    router.post('/group',upload.single('groupImage'),groupChatController.saveGroupDetails)
-
-    router.get('/group/addMembers',async(req,res)=>{
-        let response = await groupChatController.getAllMembers(req,res)
-        return res.status(200).send(response)
-    })
+    // router.post('/group',upload.single('groupImage'),groupChatController.saveGroupDetails)
 
     return router
 }

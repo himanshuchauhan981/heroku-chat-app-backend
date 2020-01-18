@@ -1,5 +1,5 @@
-exports.userLogic = require('./userLogic')
-exports.showUsersLogic = require('./showUsersLogic')
+exports.userLogic = require('./userHandler')
+exports.showUsersLogic = require('./showUsersHandler')
 exports.chatHandler = require('./chatsHandler')
 exports.groupChatHandler = require('./groupChatHandler')
 exports.imageStorage = require('./imageStorage')
