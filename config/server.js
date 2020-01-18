@@ -10,13 +10,6 @@ const {authRoutes, routes} = require('../routers')
 
 const app = express()
 
-const server = app.listen(PORT,HOST,(err)=>{
-    if(err) console.log(err)
-    else console.log(`Running on ${HOST}:${PORT}`)
-}) 
-
-app.use(cors())
-app.options('*',cors())
 app.use(function(req,res,next){
     res.setHeader('Access-Control-Allow-Origin','https://smart-chat-api.herokuapp.com/')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -24,6 +17,15 @@ app.use(function(req,res,next){
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 })
+
+const server = app.listen(PORT,HOST,(err)=>{
+    if(err) console.log(err)
+    else console.log(`Running on ${HOST}:${PORT}`)
+}) 
+
+app.use(cors())
+app.options('*',cors())
+
 
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}))
