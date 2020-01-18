@@ -10,7 +10,7 @@ const { authenticate } = require('../auth')
 module.exports = ()=>{
     const router = express.Router();
 
-    router.post('/signUp',users.saveNewUsers)
+    router.post('/api/signUp',users.saveNewUsers)
 
     router.post('/login',users.loginExistingUsers)
 
