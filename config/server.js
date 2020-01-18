@@ -16,7 +16,7 @@ const server = app.listen(PORT,HOST,(err)=>{
 }) 
 
 app.use(cors({origin: 'https://smartchat0018.herokuapp.com' }))
-app.options('*',cors())
+// app.options('*',cors())
 
 
 app.use(cookieParser())
