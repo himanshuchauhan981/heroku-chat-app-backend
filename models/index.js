@@ -1,5 +1,5 @@
 exports.users = require('./users')
-exports.userLoginStatus = require('./userLoginStatus')
+exports.userLoginStatus = require('./userOnlineStatus')
 exports.userChat = require('./userChat')
 exports.groupChat = require('./groupChat')
 exports.groupDetails = require('./groupDetails')

@@ -16,12 +16,11 @@ let getAllUnreadMessages = async (sender,allUsers)=>{
 }
 
 let showUsersHandler = {
-    
     showAllUsers : async (username)=>{
         let allUsers = await users.aggregate([
             {
                 $lookup:{
-                    from: 'loginstatuses',
+                    from: 'onlineStatus',
                     localField:'username',
                     foreignField:'username',
                     as:"usersInfo"
@@ -41,7 +40,7 @@ let showUsersHandler = {
     },
     
     makeUserOnline : async(username)=>{
-        await userLoginStatus.update({username:username},{$set:{isActive: 'online'}})
+        await userLoginStatus.update({username:username},{$set:{isActive: 'online', "logs.lastLogin":Date.now()}})
     }
 }
 

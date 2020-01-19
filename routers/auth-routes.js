@@ -1,11 +1,13 @@
 const express = require('express')
 
-const { users } = require('../controllers')
+const { userController } = require('../controllers')
 
 module.exports = ()=> {
     const router = express.Router();
 
-    router.post('/google',users.saveGoogleUsers)
+    router.post('/google',
+        userController.saveGoogleUsers
+    )
 
     return router
 }

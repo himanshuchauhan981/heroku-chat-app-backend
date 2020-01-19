@@ -7,12 +7,23 @@ checkExistingUsers = async (username,email)=>{
     let existingUserStatus = await users.find({$or:[{"username":username},{"email":email}]})
     return existingUserStatus
 }
+
+generateHashedPassword = async (password) =>{
+    let salt = bcryptjs.genSaltSync(10)
+    let hashedPassword = bcryptjs.hashSync(password,salt)
+    return hashedPassword
+}
+
+checkHashedPassword = async(password,hashedPassword)=>{
+    let status = bcryptjs.compareSync(password,hashedPassword)
+    return status
+}
+
 let userLogic = {
     saveNewUsers : async (req,res)=>{
         let status = await checkExistingUsers(req.body.username,req.body.email)
         if(status.length == 0){
-            let salt = bcryptjs.genSaltSync(10)
-            req.body.password = bcryptjs.hashSync(req.body.password,salt)
+            req.body.password =await generateHashedPassword(req.body.password)
             let signupdata = new users(req.body)
             let data = await signupdata.save()
             let statusData = factories.userLoginStatusObject(data.username,null)
@@ -28,7 +39,7 @@ let userLogic = {
     loginExistingUsers : async(req,res)=>{
         let status = await users.findOne({"username":req.body.loginusername})
         if(status != null){
-            if(bcryptjs.compareSync(req.body.loginpassword,status.password)){
+            if(checkHashedPassword(req.body.loginpassword,status.password)){
                 let token = tokenUtil.createJWTToken(status._id)
                 await userLoginStatus.update({username:status.username},{$set:{isActive:'online'}})
                 return {isLoginSuccessful: true,token: token}

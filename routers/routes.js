@@ -1,22 +1,28 @@
 const express = require('express')
 
-const { users, showUsers,groupChatController } = require('../controllers')
+const { userController, showUserController } = require('../controllers')
 const { authenticate } = require('../auth')
-// const {upload} = require('../handlers').imageStorage
-
-// app.use(upload.array());
-// app.use(express.static('public'))
 
 module.exports = ()=>{
     const router = express.Router();
 
-    router.post('/signUp',users.saveNewUsers)
+    router.post('/signUp',
+        userController.saveNewUsers
+    )
 
-    router.post('/login',users.loginExistingUsers)
+    router.post('/login',
+        userController.loginExistingUsers
+    )
 
-    router.get('/login/validate',authenticate,users.redirectUsers)
+    router.get('/login/validate',
+        authenticate,
+        userController.redirectUsers
+    )
 
-    router.get('/users',authenticate,showUsers.showAllActiveUsers)
+    router.get('/users',
+        authenticate,
+        showUserController.showAllActiveUsers
+    )
 
     // router.post('/group',upload.single('groupImage'),groupChatController.saveGroupDetails)
 

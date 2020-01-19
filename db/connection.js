@@ -1,10 +1,12 @@
-const {MONGO_DB_USER,MONGO_DB_PASSWORD,MONGO_DB} = require('./keys')
-
 const mongoose = require('mongoose')
 const Grid = require('gridfs-stream')
-const url = `mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@ds349618.mlab.com:49618/${MONGO_DB}`
 
-mongoose.connect(url,{useNewUrlParser: true, useCreateIndex: true},(err)=>{
+const {MONGO_HOSTNAME,MONGO_PORT, MONGO_DB} = require('./keys')
+
+const url = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
+
+
+mongoose.connect(url,{ useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true },(err)=>{
     if(err) {
         console.log('Mongo error ',err)
     }

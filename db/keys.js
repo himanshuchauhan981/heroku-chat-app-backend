@@ -1,5 +1,5 @@
 module.exports = {
-    MONGO_DB_USER : 'admin',
-    MONGO_DB_PASSWORD : 'smartchat0018',
-    MONGO_DB : 'smart-chat'
+    MONGO_HOSTNAME : '127.0.0.1',
+    MONGO_PORT : '27017',
+    MONGO_DB : 'chat'
 }
