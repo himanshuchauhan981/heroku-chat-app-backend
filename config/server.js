@@ -14,7 +14,7 @@ app.use(cors())
 app.use(cors({origin: 'https://smartchat0018.herokuapp.com' }))
 // app.options('*',cors())
 
-const server = app.listen(PORT,HOST,(err)=>{
+const server = app.listen(process.env.PORT || PORT,(err)=>{
     if(err) console.log(err)
     else console.log(`Running on ${HOST}:${PORT}`)
 }) 
