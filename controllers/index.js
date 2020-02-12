@@ -1,5 +1,3 @@
 exports.userController = require('./userController')
-exports.socketManager = require('./socketManager.js')
-exports.showUserController = require('./showUsersController')
+exports.userListController = require('./userListController')
 exports.chatController = require('./chatController')
-exports.groupChatController = require('./groupChatController')

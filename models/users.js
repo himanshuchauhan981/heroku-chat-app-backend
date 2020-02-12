@@ -18,18 +18,7 @@ const users = new Schema({
     createdDate: {
         type: Date,
         default: Date.now
-    },
-    accountProvider: {
-        providerID : {
-            type: String
-        },
-        provider:{
-            type:String,
-            default: 'Email'
-        }
-
     }
-
 })
 
 module.exports = mongoose.model('users',users)

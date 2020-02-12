@@ -1,31 +1,25 @@
-const {userLogic} = require('../handlers')
+const { userHandler }  = require('../handlers')
 
 let userController = {
-    saveNewUsers : async (req,res)=>{
-        let response = await userLogic.saveNewUsers(req,res)
-        return res.status(200).json(response)
+    saveNewUsers : async (req,res) =>{
+        let response = await userHandler.saveNewUsers(req,res)
+        return response
     },
-    
-    loginExistingUsers : async (req,res)=>{
-        let response = await userLogic.loginExistingUsers(req,res)
-        if(response.isLoginSuccessful){
-            return res.status(200).json(response)
-        }
-        return res.status(401).json(response)
+
+    loginExisitngUser : async (req,res) =>{
+        let response = await userHandler.loginExistingUser(req,res)
+        res.status(200).send(response)
     },
-    
-    redirectUsers : async (req,res)=>{
-        let response = await userLogic.redirectUsers(req,res)
-        return res.status(200).json(response)
+
+    validateToken : async (req,res) =>{
+        let response = await userHandler.validateToken(req,res)
+        res.status(200).send(response)
     },
-    
-    saveGoogleUsers : async (req,res)=>{
-        let response = await userLogic.saveGoogleUsers(req,res)
-        return res.status(200).json(response)
+
+    logoutExistingUser : async (req,res)=>{
+        let response = await userHandler.logoutExistingUser(req,res)
+        res.status(200).send(response)
     }
 }
-
-
-
 
 module.exports = userController

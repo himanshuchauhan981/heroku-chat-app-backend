@@ -1,17 +1,15 @@
 const jwt = require('jsonwebtoken')
-const {config} = require('../config')
 
-const createJWTToken = (id)=>{
-    var token = jwt.sign({ id, expiresIn: '24h' }, new Buffer(config.SECRET, 'base64'));
-    return token
+let tokenUtil = {
+    createJWTToken : (id)=>{
+        var token = jwt.sign({ id, expiresIn: '24h' }, new Buffer(process.env.SECRET, 'base64'));
+        return token
+    },
+
+    decodeJWTToken : (token)=>{
+        let tokenStatus = jwt.verify(token,new Buffer(process.env.SECRET,'base64'))
+        return tokenStatus
+    }    
 }
 
-const decodeJWTToken = (token)=>{
-    let tokenStatus = jwt.verify(token,new Buffer(config.SECRET,'base64'))
-    return tokenStatus
-}
-
-module.exports = {
-    createJWTToken,
-    decodeJWTToken
-}
+module.exports = tokenUtil

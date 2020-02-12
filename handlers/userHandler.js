@@ -1,7 +1,9 @@
-const { users,userLoginStatus } = require('../models')
 const bcryptjs = require('bcryptjs')
-const {factories} = require('../factories')
+
+const { users,userOnlineStatus } = require('../models')
+const { factories } = require('../factories')
 const { tokenUtil } = require('../utils')
+const { makeUserOffline } = require('./userListHandler')
 
 checkExistingUsers = async (username,email)=>{
     let existingUserStatus = await users.find({$or:[{"username":username},{"email":email}]})
@@ -19,63 +21,53 @@ checkHashedPassword = async(password,hashedPassword)=>{
     return status
 }
 
-let userLogic = {
-    saveNewUsers : async (req,res)=>{
-        let status = await checkExistingUsers(req.body.username,req.body.email)
-        if(status.length == 0){
-            req.body.password =await generateHashedPassword(req.body.password)
-            let signupdata = new users(req.body)
-            let data = await signupdata.save()
-            let statusData = factories.userLoginStatusObject(data.username,null)
-            let loginStatusData = new userLoginStatus(statusData)
+let userHandler = {
+    saveNewUsers : async (req,res) =>{
+        let existingUser = await checkExistingUsers(req.body.signupusername,req.body.signupemail)
+
+        if(existingUser.length === 0){
+            req.body.signuppassword =await generateHashedPassword(req.body.signuppassword)
+            let userObject = factories.createUserObject(req.body)
+            let signupdata = new users(userObject)
+            let savedUserData =await signupdata.save()
+            
+            let userLoginData = factories.userLoginStatusObject(savedUserData.username,null)
+            let loginStatusData = new userOnlineStatus(userLoginData)
             await loginStatusData.save()
-            return {isSignUpSuccessful: true, msg: 'User created Successfully', status: 200}
+            res.status(200).send({ status: 200, signUpStatus: true })
         }
-        else{
-            return {isSignUpSuccessful: false,msg:'User already existed', status: 200}
-        }  
+        else res.status(200).send({ status: 200, signUpStatus: false, msg:'User already existed' })
     },
 
-    loginExistingUsers : async(req,res)=>{
-        let status = await users.findOne({"username":req.body.loginusername})
-        if(status != null){
-            if(checkHashedPassword(req.body.loginpassword,status.password)){
-                let token = tokenUtil.createJWTToken(status._id)
-                await userLoginStatus.update({username:status.username},{$set:{isActive:'online'}})
-                return {isLoginSuccessful: true,token: token}
+    loginExistingUser : async (req,res)=>{
+        let existingUser = await users.findOne({"username":req.body.loginusername})
+
+        if(existingUser != null){
+            if(checkHashedPassword(req.body.loginpassword,existingUser.password)){
+                let token = tokenUtil.createJWTToken(existingUser._id)
+                await userOnlineStatus.updateOne({username:existingUser.username},{$set:{isActive:'online'}})
+                return { status: 200, loginStatus: true,token: token }
             }
-            else return {isLoginSuccessful: false, loginError:'Incorrect Credentials'}
         }
-        else return {isLoginSuccessful: false, loginError:'Incorrect Credentials'}
+        return { status: 200, loginStatus: false,loginError:'Incorrect Credentials'}
     },
 
-    saveGoogleUsers : async(req,res)=>{
-        let status = await checkExistingUsers(req.body.givenName,req.body.email)
-        if(status.length == 0){
-            let signUpObject = factories.signupObject(req.body.googleId,req.body.givenName,null,'Google',req.body.imageUrl,req.body.email)
-            let signupdata = new users(signUpObject)
-            let data  = await signupdata.save()
-            let statusData = factories.userLoginStatusObject(data._id,null)
-            let loginStatusData = new userLoginStatus(statusData)
-            await loginStatusData.save()
-        }
-        return {isSignUpSuccessful: true, msg: 'User created Successfully'}
+    validateToken : async (req,res)=>{
+        let token = req.headers.authorization
+        let decodedToken = tokenUtil.decodeJWTToken(token)
+        let usernameObject = await users.findById(decodedToken.id).select({username:1})
+        return { status:200, username: usernameObject.username}
     },
 
-    redirectUsers : async (req,res)=>{
-        let data;
-        if(req.headers.accountProvider === 'Google'){
-            data = await users.findOne({ "accountProvider.providerID":req.headers.id})
-        }
-        else if(req.headers.accountProvider === 'Email'){
-            data = await users.findById(req.headers.id)
-        }
-        return {validate: true, currentUser: data.username}
+    logoutExistingUser : async (req,res)=>{
+        let token = req.headers.authorization
+
+        let decodedToken = tokenUtil.decodeJWTToken(token)
+        let usernameObject = await users.findById(decodedToken.id).select({username:1})
+        
+        await makeUserOffline(usernameObject.username)
+        return { status: 200, msg:'User Logout sucessfully' }
     }
-    
 }
 
-
-
-
-module.exports = userLogic
+module.exports = userHandler
