@@ -26,9 +26,9 @@ app.use(session({
 
 require('../db').connection
 
-const server = app.listen(process.env.PORT,process.env.HOST,(err)=>{
+const server = app.listen(process.env.PORT || 3000,(err)=>{
     if(err) console.log(err)
-    else console.log(`Running on ${process.env.HOST}:${process.env.PORT}`)
+    else console.log(`Running on server successfully`)
 })
 
 app.use('/api',route())
