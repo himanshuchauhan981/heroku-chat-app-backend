@@ -12,7 +12,7 @@ const { route } = require('../routes')
 dotenv.config()
 
 app.use(cors())
-app.options('*',cors())
+app.use(cors({origin: 'https://smartchat0018.herokuapp.com' }))
 
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }))
