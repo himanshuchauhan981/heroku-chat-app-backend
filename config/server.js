@@ -11,7 +11,6 @@ const socket = require('socket.io')
 const { route } = require('../routes')
 dotenv.config()
 
-app.use(cors())
 app.use(cors({origin: 'https://smartchat0018.herokuapp.com' }))
 
 app.use(cookieParser())
