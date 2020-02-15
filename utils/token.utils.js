@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken')
 let privateKey = "vkjgd234vbd"
 
 let tokenUtil = {
-    createJWTToken : (id)=>{
-        var token = jwt.sign({ id, expiresIn: '24h' }, privateKey, {algorithm: 'RS256'});
+    createJWTToken : async (id)=>{
+        var token = await jwt.sign({ id, expiresIn: '24h' }, privateKey, {algorithm: 'RS256'});
         return token
     },
 
